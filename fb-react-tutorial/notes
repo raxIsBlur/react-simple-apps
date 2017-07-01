@@ -1,0 +1,162 @@
+
+
+Hello initially I wasn't exactly sure whether I wanted to write about my journey into relearning React and its ecosystem in its individualized pieces to gain a better understanding instead of building upon the knowledge that I have gained due to being thrown into development with an unfamiliar entirely new stack. 
+
+The journey then was an incredible eye opener in many ways, but it left me wondering and questioning way too much regarding the many aspects of React and React Native because of the usage of a boilerplate that handle various things in the shadow. Deadlines and wanting to have a "balanced" lifestyle left me learning everything in pieces as required to implement or deliver a particular feature left me in a bad state. Hopefully by going through a more structured approach I'll be able to finally piece everything together to gain a better understanding in React.
+
+In general I'll be following this study plan: 
+https://medium.freecodecamp.com/a-study-plan-to-cure-javascript-fatigue-8ad3a54f2eb1
+
+At the start of each week (Monday), I'll be determining the material that I will be going through as well as the end goal of the said week, whether its to complete a tutorial, complete a project and such. 
+
+---
+
+Based on the study plan I'll be skipping Week 0, which is the week to understand JavaScript basics, having completed FCC's javascript section and my previous work in JavaScript I believe I already have a solid understanding of the basics. Moving on to Week 1, where it starts with React I'll be following https://online.reacttraining.com and be completing at least the first three sections and possibly more. 
+
+---
+
+Initial setup that goes into NPM, Babel, and Webpack.
+
+NPM
+  package manager
+  easy installation of supporting packages 
+  package.json file describes the packages needed  
+  node_modules folder doesn't need to be committed 
+
+Babel 
+  to transpile ES6 code into ES5 to be used in current browsers 
+  basically this allows us to code with the new ES6 functionalities like 
+    classes
+      class Box {}
+    fat arrows 
+      With the fat arrows you can define a function as such (x) => { return x + 1 }
+
+      couple of tips on using this are: 
+        You don't have to use braces, (), if there is only one param
+          x => {return x + 1}
+
+        If the function only contains one line of code, you can do this
+          x => x + 1
+                  
+
+    multiline strings (using `` instead of "")
+
+Webpack 
+  Initially I believed this had some magic behind it to package the written code but after going through it one at a time it seems straightforward. 
+
+  With the code that you have webpack would be able to transform the code into a particular format that is suitable for production so to say. It transform based on set rules and outputs a bundle file with the transformed code.
+
+  The three things that are important to understand are: 
+    1. Entry point of the application, in many cases this can be the index.js, app.js, or main.js, 
+    2. The transformation rules to follow,
+    3. The location on where the output is to be saved.
+
+  Example of this would be: 
+
+var path = require('path')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+
+// import path from 'path'
+// import HtmlWebpackPlugin from 'html-webpack-plugin'
+
+module.exports = { 
+  // entry file
+  entry: './app/index.js',
+  // where to output the bundled file
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index_bundle.js'
+  },
+  // the transformation rules
+  module: {
+    rules: [
+      // babel loader would transform "js" files from ES6 to ES5
+      // when this line runs, the babel property in package.json that is defined with the presets will cause it to transpile accordingly 
+      { test: /\.(js)$/, use: 'babel-loader' },
+      // loads any css file 
+      // style-loader inserts the css into the page
+      // css-loader will transpile the code eg url('' to require..)
+      { test: /\.css$/, use: ['style-loader', 'css-loader' ] }      
+    ],
+  },
+  plugins: [new HtmlWebpackPlugin({
+    template: 'app/index.html',
+  })]
+}
+
+
+---- 
+
+Something that has been confusing me so far would be the need for bind and such that is shown in the react training. As such I've been trying to interpret it as much as I can but it appears I would have to understanding the binding that goes on.
+
+Take for example this snippet: 
+
+```
+  updateLanguage(lg) {
+    this.setState({selectedLanguage: lg})
+  }
+
+  render() {
+    return (
+      <div>
+        <SelectLanguage 
+          selectedLanguage={this.state.selectedLanguage}
+          /*
+            The issue was here as what I initially did was
+            ``` onSelect={this.updateLanguage} ```
+            1. I didn't bind the function in the constructor and,
+            2. I didn't use the arrow function correctly to pass the value to the function.
+
+            Doing this however seems to be a no no as using a bind call or arrow functions in JSX recreates a new function on every render call 
+
+            https://stackoverflow.com/questions/38440925/react-native-this-setstate-is-not-a-function
+
+          */ 
+          onSelect={(val) => this.updateLanguage(val)}
+
+        />
+      </div>
+    )
+  }
+```
+
+`props.children`
+
+Such a useful piece of shit thing ._. Never exactly realized that you could pass a whole other component/elements to another component as children and rendering it 
+
+
+---
+
+1. Feature list. What features will the site have? (sliders, forms, user registration, using a cms? framework? etc etc)
+2. Site Map (information architecture. What menu items will you have, how many levels of info? how will pages be grouped?)
+3. Wireframes Quick mockups of how the site will flow/navigate. I get clients to sign off on this before designing anything in photoshop/illustrator.
+4. Design Comps. Mockup how the site's main pages will look. Get client to sign off on before development.
+5. Development. Building of the site starts here. Setting up version control and local copies etc. Includes all front end/back end dev and SEO.
+6. Q/A Test everything, then test it again, and again and again.
+7. Launch.Move site from dev server to clients host. Test more. Fix what broke during the move.
+
+
+Roughly
+understand the client's needs based on their specs
+write user stories (for different roles)
+get client feedback, back to previous step
+create data models and revisit stories
+get the basic stuff to work (that means backend + frontend coding)
+begin iterative, incremental process of upgrades with constant feedback (scrum, agile, more buzzwords)
+
+```
+
+function PlayerPreview(props) {
+  return (
+    <div>
+      <div className="column">
+        <img className="avatar" src={props.avatar} alt={'Avatar for ' + props.username} />
+        <h2 className="header">@{props.username}</h2>
+      </div>
+      {props.children}
+    </div>
+  )
+}
+
+```
+
